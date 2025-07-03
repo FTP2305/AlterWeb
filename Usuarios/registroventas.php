@@ -183,7 +183,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['finalizar_venta'])) {
 <body>
     <header class="navbar">
         <a href="#" class="logo">
-            TiTiShop - Vista de Vendedor
+            TiTiShop - Vista de Vendedor.
         </a>
         <nav>
             <ul class="nav-links">
