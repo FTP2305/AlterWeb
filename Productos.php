@@ -6,9 +6,7 @@ include 'Includes/conexion.php';
 $conexion = new Conexion();
 $conn = $conexion->getConectar();
 
-$nuevo = isset($_GET['nuevo']) ? (int)$_GET['nuevo'] : 0;
-$oferta = isset($_GET['oferta']) ? (int)$_GET['oferta'] : 0;
-$mas_vendidos = isset($_GET['mas_vendidos']) ? (int)$_GET['mas_vendidos'] : 0;
+$categoria_id = isset($_GET['categoria']) ? (int)$_GET['categoria'] : 0; 
 $precio_min = isset($_GET['precio_min']) && $_GET['precio_min'] !== '' ? floatval($_GET['precio_min']) : 0;
 $precio_max = isset($_GET['precio_max']) && $_GET['precio_max'] !== '' ? floatval($_GET['precio_max']) : 0;
 
@@ -17,10 +15,21 @@ $conditions = [];
 $params = [];
 $param_types = '';
 
-if ($nuevo) { $conditions[] = "nuevo = ?"; $params[] = 1; $param_types .= 'i'; }
-if ($oferta) { $conditions[] = "oferta = ?"; $params[] = 1; $param_types .= 'i'; }
-if ($precio_min > 0) { $conditions[] = "precio >= ?"; $params[] = $precio_min; $param_types .= 'd'; }
-if ($precio_max > 0) { $conditions[] = "precio <= ?"; $params[] = $precio_max; $param_types .= 'd'; }
+if ($categoria_id > 0) {
+    $conditions[] = "id_categoria = ?";
+    $params[] = $categoria_id;
+    $param_types .= 'i';
+}
+if ($precio_min > 0) {
+    $conditions[] = "precio >= ?";
+    $params[] = $precio_min;
+    $param_types .= 'd';
+}
+if ($precio_max > 0) {
+    $conditions[] = "precio <= ?";
+    $params[] = $precio_max;
+    $param_types .= 'd';
+}
 
 if (!empty($conditions)) {
     $sql .= " AND " . implode(" AND ", $conditions);
@@ -43,7 +52,14 @@ if (!empty($params)) {
 
 $stmt->execute();
 $result = $stmt->get_result();
-
+$categorias = [];
+$sql_categorias = "SELECT id_categoria, nombre_categoria FROM categorias ORDER BY nombre_categoria ASC";
+$result_categorias = $conn->query($sql_categorias);
+if ($result_categorias) {
+    while ($row_cat = $result_categorias->fetch_assoc()) {
+        $categorias[] = $row_cat;
+    }
+}
 if (isset($_POST['agregar_al_carrito'])) {
     if (!isset($_SESSION['id_cliente'])) {
         $_SESSION['mensaje_error'] = "Debes iniciar sesión para agregar productos al carrito.";
@@ -151,9 +167,16 @@ if (isset($_POST['agregar_al_carrito'])) {
     <aside class="filtros">
       <h3>Filtrar</h3>
       <form method="GET" action="Productos.php">
-        <label><input type="checkbox" name="nuevo" value="1" <?php echo ($nuevo == 1) ? 'checked' : ''; ?>> Nuevo</label>
-        <label><input type="checkbox" name="oferta" value="1" <?php echo ($oferta == 1) ? 'checked' : ''; ?>> Oferta</label>
-        <label><input type="checkbox" name="mas_vendidos" value="1" <?php echo ($mas_vendidos == 1) ? 'checked' : ''; ?>> Más vendidos</label>
+        <h4>Categoría</h4>
+        <select name="categoria">
+            <option value="0">Todas las categorías</option>
+            <?php foreach ($categorias as $cat): ?>
+                <option value="<?php echo htmlspecialchars($cat['id_categoria']); ?>" <?php echo ($categoria_id == $cat['id_categoria']) ? 'selected' : ''; ?>>
+                    <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
+                </option>
+            <?php endforeach; ?>
+        </select>
+       
 
         <h4>Precio</h4>
         <input type="number" name="precio_min" placeholder="Desde S/." class="precio-input" value="<?php echo ($precio_min > 0) ? $precio_min : ''; ?>">

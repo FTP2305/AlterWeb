@@ -37,6 +37,17 @@ body {
     border-bottom: 3px solid #FFD100; 
     padding-bottom: 15px; 
 }
+/* Estilo para el campo select */
+select {
+    width: 100%; /* Asegura que el campo ocupe todo el ancho disponible */
+    padding: 10px; /* Añade espacio dentro del campo para mejor visualización */
+    font-size: 16px; /* Aumenta el tamaño de la fuente para que sea más legible */
+    border: 1px solid #ccc; /* Un borde sutil para el campo */
+    border-radius: 5px; /* Bordes redondeados */
+    background-color: #f9f9f9; /* Fondo claro */
+    margin-bottom: 15px; /* Añade un margen inferior entre los campos */
+    box-sizing: border-box; /* Para asegurarse de que el padding no desborde el ancho */
+}
 
 .filtros h4 {
     font-size: 20px;

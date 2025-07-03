@@ -8,7 +8,7 @@ $conn = $conexion->getConectar();
 // --- VERIFICACIÓN DE SESIÓN (CRUCIAL) ---
 // Si el cliente no está logueado, redirigirlo a la página de login.
 if (!isset($_SESSION['id_cliente'])) {
-    header('Location: http://localhost/ProyectoWEB/Cliente/Login.php'); // Asegura esta ruta
+    header('Location: http://localhost/AlterWeb/Roles/Login.php'); // Asegura esta ruta
     exit();
 }
 
