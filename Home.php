@@ -1,40 +1,45 @@
 <?php
-session_start();  // Verificar sesión del usuario
+session_start();
+$estaLogueado = isset($_SESSION['id_usuario']) ? '1' : '0';
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tiii Shop - Tienda de Electrónica</title>
-    <link rel="stylesheet" href="Home.css">
-    <link rel="stylesheet" href="base.css">
-    <link rel="stylesheet" href="components.css">
-    <link rel="stylesheet" href="chatbot.css"> 
-    
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tiii Shop - Tienda de Electrónica</title>
+  <link rel="stylesheet" href="Home.css">
+  <link rel="stylesheet" href="base.css">
+  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="chatbot.css"> 
 </head>
 <body>
+
   <!-- CHATBOT -->
   <div id="chatbot-container">
     <div id="chatbot-header">
-        <h2>Chat de Ayuda</h2>
-        <button id="close-chatbot" aria-label="Cerrar chat">X</button>
+      <h2>Chat de Ayuda</h2>
+      <button id="close-chatbot" aria-label="Cerrar chat">X</button>
     </div>
     <div id="chatbot-messages">
-        <div class="message bot-message">
-            <p>¡Hola! Soy Titobot, ¿en qué puedo ayudarte hoy?</p>
-        </div>
+      <div class="message bot-message">
+        <p>¡Hola! Soy Titobot, ¿en qué puedo ayudarte hoy?</p>
+      </div>
     </div>
     <div id="chatbot-input-container">
-        <input type="text" id="chatbot-input" placeholder="Escribe tu pregunta...">
-        <button id="chatbot-send">Enviar</button>
+      <input type="text" id="chatbot-input" placeholder="Escribe tu pregunta...">
+      <button id="chatbot-send">Enviar</button>
     </div>
   </div>
-  <button id="open-chatbot-button" aria-label="Abrir chat de ayuda">
+
+  <button id="open-chatbot-button" aria-label="Abrir chat de ayuda" data-logueado="<?php echo $estaLogueado; ?>">
     <img src="img/chat_icon.svg" alt="Abrir chat">
   </button>
-  <!-- FIN CHATBOT -->
+
+  <script>
+    const estaLogueado = <?php echo $estaLogueado === '1' ? 'true' : 'false'; ?>;
+  </script>
 
   <!-- ENCABEZADO -->
   <header>
@@ -91,25 +96,15 @@ session_start();  // Verificar sesión del usuario
   <section class="marcas">
     <h2>Marcas</h2>
     <div class="marcas-grid">
-      <div class="marca">BRANDAME
-        <img src="img/brandnamemarca1.jpg" alt="Marca 1" class="tmñmarca">
-      </div>
-      <div class="marca">DRONEX
-        <img src="img/marca2.jpg" alt="Marca 2" class="tmñmarca">
-      </div>
-      <div class="marca">LIDIMI
-        <img src="img/marca3.jpg" alt="Marca 3" class="tmñmarca">
-      </div>
-      <div class="marca">TV BOX
-        <img src="img/marca4.webp" alt="Marca 4" class="tmñmarca">
-      </div>
-      <div class="marca">SONY
-        <img src="img/marca5.jpg" alt="Marca 5" class="tmñmarca">
-      </div>
+      <div class="marca">BRANDAME <img src="img/brandnamemarca1.jpg" alt="Marca 1" class="tmñmarca"></div>
+      <div class="marca">DRONEX <img src="img/marca2.jpg" alt="Marca 2" class="tmñmarca"></div>
+      <div class="marca">LIDIMI <img src="img/marca3.jpg" alt="Marca 3" class="tmñmarca"></div>
+      <div class="marca">TV BOX <img src="img/marca4.webp" alt="Marca 4" class="tmñmarca"></div>
+      <div class="marca">SONY <img src="img/marca5.jpg" alt="Marca 5" class="tmñmarca"></div>
     </div>
   </section>
 
-  <!-- SECCIÓN DE PRODUCTOS DESTACADOS -->
+  <!-- PRODUCTOS DESTACADOS -->
   <section class="productos">
     <div class="destacado-grande">
       <img src="img/panel.png" alt="Panel de ofertas" class="tmñproductodestacado">
@@ -135,67 +130,52 @@ session_start();  // Verificar sesión del usuario
     </div>
 
     <div class="productos-grid">
-      <div>DRONE FP 2736
-        <img src="img/DRON FP 2736.jpg" alt="DRONE FP 2736" class="tmñproducto">
-      </div>
-      <div>DRONE M6
-        <img src="img/DRONE M6.jpg" alt="DRONE M6" class="tmñproducto">
-      </div>
-      <div>K11 PRO MAX
-        <img src="img/K11 PRO MAX.webp" alt="K11 PRO MAX" class="tmñproducto">
-      </div>
-      <div>DRONE E99 PRO
-        <img src="img/DRONE E99 PRO.jpg" alt="DRONE E99 PRO" class="tmñproducto">
-      </div>
-      <div>DRONE K12 MAX
-        <img src="img/DRONE K12 MAX.jpg" alt="DRONE K12 MAX" class="tmñproducto">
-      </div>
+      <div>DRONE FP 2736 <img src="img/DRON FP 2736.jpg" alt="DRONE FP 2736" class="tmñproducto"></div>
+      <div>DRONE M6 <img src="img/DRONE M6.jpg" alt="DRONE M6" class="tmñproducto"></div>
+      <div>K11 PRO MAX <img src="img/K11 PRO MAX.webp" alt="K11 PRO MAX" class="tmñproducto"></div>
+      <div>DRONE E99 PRO <img src="img/DRONE E99 PRO.jpg" alt="DRONE E99 PRO" class="tmñproducto"></div>
+      <div>DRONE K12 MAX <img src="img/DRONE K12 MAX.jpg" alt="DRONE K12 MAX" class="tmñproducto"></div>
     </div>
   </section>
 
-  <!-- PIE DE PÁGINA -->
+  <!-- FOOTER -->
   <footer>
     <div class="footer-section">
-        <h4>Contáctanos</h4>
-        <p>WhatsApp: +51 123 456 789</p>
-        <p>Atención: Lun-Sáb 9am-6pm</p>
+      <h4>Contáctanos</h4>
+      <p>WhatsApp: +51 123 456 789</p>
+      <p>Atención: Lun-Sáb 9am-6pm</p>
     </div>
     <div class="footer-section">
-        <h4>Sobre Nosotros</h4>
-        <ul>
-            <li><a href="#">¿Quiénes somos?</a></li>
-            <li><a href="#">Misión</a></li>
-            <li><a href="#">Visión</a></li>
-        </ul>
+      <h4>Sobre Nosotros</h4>
+      <ul>
+        <li><a href="#">¿Quiénes somos?</a></li>
+        <li><a href="#">Misión</a></li>
+        <li><a href="#">Visión</a></li>
+      </ul>
     </div>
     <div class="footer-section">
-        <h4>Políticas de empresa</h4>
-        <ul>
-            <li><a href="#">Política de garantía</a></li>
-            <li><a href="#">Devolución y cambio</a></li>
-            <li><a href="#">Privacidad</a></li>
-            <li><a href="#">Envíos</a></li>
-        </ul>
+      <h4>Políticas de empresa</h4>
+      <ul>
+        <li><a href="#">Política de garantía</a></li>
+        <li><a href="#">Devolución y cambio</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Envíos</a></li>
+      </ul>
     </div>
     <div class="footer-section">
-        <h4>Síguenos</h4>
-        <p>Facebook / TikTok / Instagram</p>
-        <div class="redes-sociales">
-          <a href="Facebook.com">
-            <img src="img/fb_sinfondo.png" alt="Facebook">
-          </a>
-          <a href="TikTok.com">
-            <img src="img/tiktok_sinfondo.png" alt="TikTok">
-          </a>
-          <a href="Instagram.com">
-            <img src="img/logo_insta_sinfondo.png" alt="Instagram">
-          </a>
-        </div>
+      <h4>Síguenos</h4>
+      <p>Facebook / TikTok / Instagram</p>
+      <div class="redes-sociales">
+        <a href="Facebook.com"><img src="img/fb_sinfondo.png" alt="Facebook"></a>
+        <a href="TikTok.com"><img src="img/tiktok_sinfondo.png" alt="TikTok"></a>
+        <a href="Instagram.com"><img src="img/logo_insta_sinfondo.png" alt="Instagram"></a>
+      </div>
     </div>
     <div class="copyright">
-        <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
+      <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
     </div>
-</footer>
-<script src="chatbot.js"></script> 
+  </footer>
+
+  <script src="chatbot.js"></script>
 </body>
 </html>

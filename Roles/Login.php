@@ -1,20 +1,16 @@
 <?php
 session_start(); // Iniciar la sesión
 
-
 $mensaje = "";
-
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $correo = $_POST['email'];
     $clave = $_POST['password'];
 
-   
     include '../Includes/conexion.php';
     $conexion = new Conexion();
     $conn = $conexion->getConectar();
 
-    
     $sql = "SELECT * FROM clientes WHERE correo = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $correo); 
@@ -24,9 +20,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($resultado->num_rows === 1) {
         $cliente = $resultado->fetch_assoc();
         if (password_verify($clave, $cliente['contrasena'])) {
-            
             $_SESSION['id_cliente'] = $cliente['id_cliente'];
             $_SESSION['nombre'] = $cliente['nombre'];
+            $_SESSION['id_usuario'] = $cliente['id_cliente']; // <- para chatbot y más
 
             header("Location: ../Home.php");
             exit();
@@ -53,16 +49,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <body>
   <header>
     <div class="navbar">
-      <img src="..//img/LOGOTITI.jpeg" alt="Logo TITI SHOP" class="logo">
-      <h3><a href="..//Home.php" style="color: black;">Inicio</a></h3>
-      <h3><a href="..//Productos.php" style="color: black;">Productos</a></h3>
-      <h3><a href="..//Contactanos.php" style="color: black;">Contáctanos</a></h3>
-      <h3><a href="..//Nosotros.php" style="color: black;">Nosotros</a></h3>
-      <h3><a href="..//Preguntas.php" style="color: black;">Preguntas Frecuentes</a></h3>
+      <img src="../img/LOGOTITI.jpeg" alt="Logo TITI SHOP" class="logo">
+      <h3><a href="../Home.php" style="color: black;">Inicio</a></h3>
+      <h3><a href="../Productos.php" style="color: black;">Productos</a></h3>
+      <h3><a href="../Contactanos.php" style="color: black;">Contáctanos</a></h3>
+      <h3><a href="../Nosotros.php" style="color: black;">Nosotros</a></h3>
+      <h3><a href="../Preguntas.php" style="color: black;">Preguntas Frecuentes</a></h3>
       <div class="user-menu">
-        <a href="Login.php"><img src="..//img/loginsinfondo.png" alt="Usuario" class="icono"></a>
-        <a href="#"><img src="..//img/historial de compras.png" alt="Historial" class="icono"></a>
-        <a href="#"><img src="..//img/carrocomprassinfondo.png" alt="Carro de Compras" class="icono"></a>
+        <a href="Login.php"><img src="../img/loginsinfondo.png" alt="Usuario" class="icono"></a>
+        <a href="#"><img src="../img/historial de compras.png" alt="Historial" class="icono"></a>
+        <a href="#"><img src="../img/carrocomprassinfondo.png" alt="Carro de Compras" class="icono"></a>
       </div>
     </div>
   </header>
@@ -122,19 +118,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <p>Facebook / TikTok / Instagram</p>
         <div class="redes-sociales">
           <a href="Facebook.com">
-            <img src="..//img/fb_sinfondo.png" alt="Facebook">
+            <img src="../img/fb_sinfondo.png" alt="Facebook">
           </a>
           <a href="TikTok.com">
-            <img src="..//img/tiktok_sinfondo.png" alt="TikTok">
+            <img src="../img/tiktok_sinfondo.png" alt="TikTok">
           </a>
           <a href="Instagram.com">
-            <img src="..//img/logo_insta_sinfondo.png" alt="Instagram">
+            <img src="../img/logo_insta_sinfondo.png" alt="Instagram">
           </a>
         </div>
     </div>
     <div class="copyright">
         <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
     </div>
-</footer>
+  </footer>
 </body>
 </html>

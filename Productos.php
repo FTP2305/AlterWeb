@@ -10,6 +10,9 @@ $categoria_id = isset($_GET['categoria']) ? (int)$_GET['categoria'] : 0;
 $precio_min = isset($_GET['precio_min']) && $_GET['precio_min'] !== '' ? floatval($_GET['precio_min']) : 0;
 $precio_max = isset($_GET['precio_max']) && $_GET['precio_max'] !== '' ? floatval($_GET['precio_max']) : 0;
 
+// Bandera opcional para productos más vendidos (puedes activarla si luego lo usas)
+$mas_vendidos = false;
+
 $sql = "SELECT * FROM productos WHERE 1";
 $conditions = [];
 $params = [];
@@ -35,11 +38,7 @@ if (!empty($conditions)) {
     $sql .= " AND " . implode(" AND ", $conditions);
 }
 
-if ($mas_vendidos) {
-    $sql .= " ORDER BY ventas DESC";
-} else {
-    $sql .= " ORDER BY id_producto ASC";
-}
+$sql .= $mas_vendidos ? " ORDER BY ventas DESC" : " ORDER BY id_producto ASC";
 
 $stmt = $conn->prepare($sql);
 if ($stmt === false) {
@@ -52,6 +51,8 @@ if (!empty($params)) {
 
 $stmt->execute();
 $result = $stmt->get_result();
+
+// Obtener categorías
 $categorias = [];
 $sql_categorias = "SELECT id_categoria, nombre_categoria FROM categorias ORDER BY nombre_categoria ASC";
 $result_categorias = $conn->query($sql_categorias);
@@ -60,6 +61,8 @@ if ($result_categorias) {
         $categorias[] = $row_cat;
     }
 }
+
+// Agregar al carrito
 if (isset($_POST['agregar_al_carrito'])) {
     if (!isset($_SESSION['id_cliente'])) {
         $_SESSION['mensaje_error'] = "Debes iniciar sesión para agregar productos al carrito.";
@@ -123,7 +126,8 @@ if (isset($_POST['agregar_al_carrito'])) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TITI SHOP | Productos</title>
   <link rel="stylesheet" href="estilo.css">
-  <link rel="stylesheet" href="productos.css"> <link rel="stylesheet" href="Home.css">
+  <link rel="stylesheet" href="productos.css">
+  <link rel="stylesheet" href="Home.css">
   <link rel="stylesheet" href="base.css">
   <link rel="stylesheet" href="components.css">
 </head>
@@ -145,7 +149,7 @@ if (isset($_POST['agregar_al_carrito'])) {
             Hola! <?php echo htmlspecialchars($_SESSION['nombre']); ?>
           </span>
           <a href="logout.php" style="margin-left: 20px;">
-            <img src="img/cerrarsesion1-removebg-preview.png" alt="Cerrar sesión" class="icono" >
+            <img src="img/cerrarsesion1-removebg-preview.png" alt="Cerrar sesión" class="icono">
           </a>
         <?php else: ?>
           <a href="http://localhost/AlterWeb/Roles/Login.php">
@@ -163,35 +167,34 @@ if (isset($_POST['agregar_al_carrito'])) {
   </header>
 
   <main>
-  <section class="productos-page">
-    <aside class="filtros">
-      <h3>Filtrar</h3>
-      <form method="GET" action="Productos.php">
-        <h4>Categoría</h4>
-        <select name="categoria">
+    <section class="productos-page">
+      <aside class="filtros">
+        <h3>Filtrar</h3>
+        <form method="GET" action="Productos.php">
+          <h4>Categoría</h4>
+          <select name="categoria">
             <option value="0">Todas las categorías</option>
             <?php foreach ($categorias as $cat): ?>
-                <option value="<?php echo htmlspecialchars($cat['id_categoria']); ?>" <?php echo ($categoria_id == $cat['id_categoria']) ? 'selected' : ''; ?>>
-                    <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
-                </option>
+              <option value="<?php echo htmlspecialchars($cat['id_categoria']); ?>" <?php echo ($categoria_id == $cat['id_categoria']) ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($cat['nombre_categoria']); ?>
+              </option>
             <?php endforeach; ?>
-        </select>
-       
+          </select>
 
-        <h4>Precio</h4>
-        <input type="number" name="precio_min" placeholder="Desde S/." class="precio-input" value="<?php echo ($precio_min > 0) ? $precio_min : ''; ?>">
-        <input type="number" name="precio_max" placeholder="Hasta S/." class="precio-input" value="<?php echo ($precio_max > 0) ? $precio_max : ''; ?>">
-        <button class="btn-filtrar" type="submit">Aplicar</button>
-      </form>
-    </aside>
+          <h4>Precio</h4>
+          <input type="number" name="precio_min" placeholder="Desde S/." class="precio-input" value="<?php echo ($precio_min > 0) ? $precio_min : ''; ?>">
+          <input type="number" name="precio_max" placeholder="Hasta S/." class="precio-input" value="<?php echo ($precio_max > 0) ? $precio_max : ''; ?>">
+          <button class="btn-filtrar" type="submit">Aplicar</button>
+        </form>
+      </aside>
 
-    <div class="contenido-productos">
-      <div class="barra-superior">
-        <h2>Todos los productos</h2>
+      <div class="contenido-productos">
+        <div class="barra-superior">
+          <h2>Todos los productos</h2>
         </div>
 
-      <div class="grid-productos">
-        <?php if ($result->num_rows > 0): ?>
+        <div class="grid-productos">
+          <?php if ($result->num_rows > 0): ?>
             <?php while ($row = $result->fetch_assoc()): ?>
               <div class="producto">
                 <div class="producto-centrado">
@@ -201,65 +204,58 @@ if (isset($_POST['agregar_al_carrito'])) {
                     <p class="producto-especific"><?php echo htmlspecialchars($row['descripcion']); ?></p>
                     <p class="producto-precio">S/. <?php echo number_format($row['precio'], 2); ?></p>
                     <form method="POST" action="Productos.php">
-                        <input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($row['id_producto']); ?>">
-                        <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($row['nombre']); ?>">
-                        <input type="hidden" name="precio" value="<?php echo htmlspecialchars($row['precio']); ?>">
-                        <button class="btn-filtrar" type="submit" name="agregar_al_carrito">Agregar al carrito</button>
+                      <input type="hidden" name="id_producto" value="<?php echo htmlspecialchars($row['id_producto']); ?>">
+                      <input type="hidden" name="nombre" value="<?php echo htmlspecialchars($row['nombre']); ?>">
+                      <input type="hidden" name="precio" value="<?php echo htmlspecialchars($row['precio']); ?>">
+                      <button class="btn-filtrar" type="submit" name="agregar_al_carrito">Agregar al carrito</button>
                     </form>
                   </div>
                 </div>
               </div>
             <?php endwhile; ?>
-        <?php else: ?>
+          <?php else: ?>
             <p class="no-products-message">No se encontraron productos que coincidan con los filtros aplicados.</p>
-        <?php endif; ?>
+          <?php endif; ?>
+        </div>
       </div>
-    </div>
-  </section>
-</main>
+    </section>
+  </main>
 
   <footer>
     <div class="footer-section">
-        <h4>Contáctanos</h4>
-        <p>WhatsApp: +51 123 456 789</p>
-        <p>Atención: Lun-Sáb 9am-6pm</p>
+      <h4>Contáctanos</h4>
+      <p>WhatsApp: +51 123 456 789</p>
+      <p>Atención: Lun-Sáb 9am-6pm</p>
     </div>
     <div class="footer-section">
-        <h4>Sobre Nosotros</h4>
-        <ul>
-            <li><a href="#">¿Quiénes somos?</a></li>
-            <li><a href="#">Misión</a></li>
-            <li><a href="#">Visión</a></li>
-        </ul>
+      <h4>Sobre Nosotros</h4>
+      <ul>
+        <li><a href="#">¿Quiénes somos?</a></li>
+        <li><a href="#">Misión</a></li>
+        <li><a href="#">Visión</a></li>
+      </ul>
     </div>
     <div class="footer-section">
-        <h4>Políticas de empresa</h4>
-        <ul>
-            <li><a href="#">Política de garantía</a></li>
-            <li><a href="#">Devolución y cambio</a></li>
-            <li><a href="#">Privacidad</a></li>
-            <li><a href="#">Envíos</a></li>
-        </ul>
+      <h4>Políticas de empresa</h4>
+      <ul>
+        <li><a href="#">Política de garantía</a></li>
+        <li><a href="#">Devolución y cambio</a></li>
+        <li><a href="#">Privacidad</a></li>
+        <li><a href="#">Envíos</a></li>
+      </ul>
     </div>
     <div class="footer-section">
-        <h4>Síguenos</h4>
-        <p>Facebook / TikTok / Instagram</p>
-        <div class="redes-sociales">
-          <a href="Facebook.com">
-            <img src="img/fb_sinfondo.png" alt="Facebook">
-          </a>
-          <a href="TikTok.com">
-            <img src="img/tiktok_sinfondo.png" alt="TikTok">
-          </a>
-          <a href="Instagram.com">
-            <img src="img/logo_insta_sinfondo.png" alt="Instagram">
-          </a>
-        </div>
+      <h4>Síguenos</h4>
+      <p>Facebook / TikTok / Instagram</p>
+      <div class="redes-sociales">
+        <a href="Facebook.com"><img src="img/fb_sinfondo.png" alt="Facebook"></a>
+        <a href="TikTok.com"><img src="img/tiktok_sinfondo.png" alt="TikTok"></a>
+        <a href="Instagram.com"><img src="img/logo_insta_sinfondo.png" alt="Instagram"></a>
+      </div>
     </div>
     <div class="copyright">
-        <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
+      <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
     </div>
-</footer>
-
+  </footer>
 </body>
 </html>
