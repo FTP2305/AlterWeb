@@ -77,6 +77,7 @@ $resultado = $conn->query($sql);
                     <a href="../Usu/listar.php">Usuarios</a>
                     <a href="../Usuarios/registroventas.php">Ventas</a>
                     <a href="../Usuarios/historial.php">Reportes</a>
+                    <a href="../Usuarios/adminpag.php">Volver</a>
                 </div>
             </div>
         </div>
