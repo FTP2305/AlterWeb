@@ -8,6 +8,22 @@ CREATE TABLE roles (
     descripcion_rol TEXT
 );
 
+<<<<<<< HEAD
+=======
+
+CREATE TABLE mensajes (
+    id_mensaje INT AUTO_INCREMENT PRIMARY KEY,
+    id_emisor INT NOT NULL,
+    id_receptor INT NOT NULL,
+    asunto VARCHAR(100),
+    mensaje TEXT,
+    archivo_url VARCHAR(255),
+    fecha_envio DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (id_emisor) REFERENCES usuarios(id_usuario),
+    FOREIGN KEY (id_receptor) REFERENCES usuarios(id_usuario)
+);
+
+>>>>>>> bfb9577 (bibibi)
 -- Crear tabla de Vistas
 CREATE TABLE vistas (
     id_vista INT AUTO_INCREMENT PRIMARY KEY,
