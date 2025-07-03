@@ -11,9 +11,30 @@ session_start();  // Verificar sesión del usuario
     <link rel="stylesheet" href="Home.css">
     <link rel="stylesheet" href="base.css">
     <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="chatbot.css"> 
     
 </head>
 <body>
+  <!-- CHATBOT -->
+  <div id="chatbot-container">
+    <div id="chatbot-header">
+        <h2>Chat de Ayuda</h2>
+        <button id="close-chatbot" aria-label="Cerrar chat">X</button>
+    </div>
+    <div id="chatbot-messages">
+        <div class="message bot-message">
+            <p>¡Hola! Soy Titobot, ¿en qué puedo ayudarte hoy?</p>
+        </div>
+    </div>
+    <div id="chatbot-input-container">
+        <input type="text" id="chatbot-input" placeholder="Escribe tu pregunta...">
+        <button id="chatbot-send">Enviar</button>
+    </div>
+  </div>
+  <button id="open-chatbot-button" aria-label="Abrir chat de ayuda">
+    <img src="img/chat_icon.svg" alt="Abrir chat">
+  </button>
+  <!-- FIN CHATBOT -->
 
   <!-- ENCABEZADO -->
   <header>
@@ -175,6 +196,6 @@ session_start();  // Verificar sesión del usuario
         <p>&copy; 2025 Tu Empresa. Todos los derechos reservados.</p>
     </div>
 </footer>
-
+<script src="chatbot.js"></script> 
 </body>
 </html>

@@ -117,11 +117,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type']) && $_POST
             </div>
 
             <div class="action-buttons">
-                <a href="../Productos/registrar.php" class="action-button">
+                <a href="../Productos/crudProductos.php" class="action-button">
                     <div class="icon-circle"><i class="fas fa-box"></i></div>
                     Gestión de Productos
                 </a>
-                <a href="../Cliente/listar.php" class="action-button">
+                <a href="../Roles/crudClientes.php" class="action-button">
                     <div class="icon-circle"><i class="fas fa-users"></i></div>
                     Gestión de Clientes
                 </a>
@@ -133,7 +133,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['form_type']) && $_POST
                     <div class="icon-circle"><i class="fas fa-dollar-sign"></i></div>
                     Gestión de Ventas
                 </a>
-                <a href="../Usuarios/listar.php" class="action-button">
+                <a href="../Usu/crudUsuarios.php" class="action-button">
                     <div class="icon-circle"><i class="fas fa-user"></i></div>
                     Gestión de Usuarios
                 </a>

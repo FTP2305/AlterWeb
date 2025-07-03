@@ -30,7 +30,6 @@ if (isset($_POST['buscar'])) {
 
 
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -64,7 +63,8 @@ if (isset($_POST['buscar'])) {
                             <tr>
                                 <th>ID</th>
                                 <th>Nombre</th> <th>Correo</th>
-                                <th>Contraseña (Hash)</th> </tr>
+                                <th>Contraseña (Hash)</th> 
+                                <th>Eliminar</th></tr>
                         </thead>
                         <tbody>
                             <?php
@@ -74,6 +74,7 @@ if (isset($_POST['buscar'])) {
                                         <td><?php echo htmlspecialchars($row['id_usuario']); ?></td>
                                         <td><?php echo htmlspecialchars($row['nombre_usuario']); ?></td> <td><?php echo htmlspecialchars($row['correo']); ?></td>
                                         <td><?php echo htmlspecialchars($row['contrasena']); ?></td>
+                                        <td><a href="eliminar_usuario.php?id=<?php echo $row['id_usuario']; ?>" onclick="return confirm('¿Estás seguro de que quieres eliminar este usuario?')">Eliminar</a></td>
                                         </tr>
                                 <?php }
                             } else {
